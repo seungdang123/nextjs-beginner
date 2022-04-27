@@ -1,15 +1,35 @@
+import Link from "next/link";
 import { useState, useEffect } from "react";
 import Seo from "../components/Seo";
+import { useRouter } from "next/router";
 
 export default function Home({ results }) {
+  const router = useRouter();
+  const onClick = (id, title) => {
+    router.push({
+      pathname: `/movies/${title}/${id}`,
+    });
+  };
+
   return (
     <div className="container">
       <Seo title="Home" />
-
       {results?.map((movie) => (
-        <div className="movie" key={movie.id}>
+        <div
+          onClick={() => onClick(movie.id, movie.original_title)}
+          className="movie"
+          key={movie.id}
+        >
           <img src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`} />
-          <h4>{movie.original_title}</h4>
+          <h4>
+            <Link
+              href={{
+                pathname: `/movies/${movie.original_title}/${movie.id}`,
+              }}
+            >
+              <a>{movie.original_title}</a>
+            </Link>
+          </h4>
         </div>
       ))}
       <style jsx>{`
